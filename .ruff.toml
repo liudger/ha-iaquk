@@ -7,7 +7,6 @@ select = [
     "ALL",
 ]
 ignore = [
-    "ANN101", # Missing type annotation for `self` in method
     "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
     "D203", # no-blank-line-before-class (incompatible with formatter)
     "D212", # multi-line-summary-first-line (incompatible with formatter)
@@ -27,4 +26,15 @@ keep-runtime-typing = true
 max-complexity = 25
 
 [lint.per-file-ignores]
-"tests/*.py" = ["ANN001", "ANN201", "ARG001", "PLR2004", "S101", "S311", "SLF001"]
+"**/tests/**.py" = [
+    "ANN001", # missing-type-function-argument
+    "ANN201", # missing-return-type-undocumented-public-function
+    "ARG001", # unused-function-argument
+    "PLR2004", # magic-value-comparison
+    "S101", # assert
+    "S311", # suspicious-non-cryptographic-random-usage
+    "SLF001", # private-member-access
+    "S105", # hardcoded-password-string
+    "S106", # hardcoded-password-func-arg
+    "S107", # hardcoded-password-default
+]
