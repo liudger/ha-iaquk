@@ -1,0 +1,11 @@
+{
+  "state": {
+    "iaquk__level": {
+      "Excellent": "Sehr gut",
+      "Good": "Gut",
+      "Fair": "Mäßig",
+      "Poor": "Schlecht",
+      "Inadequate": "Sehr schlecht"
+    }
+  }
+}
