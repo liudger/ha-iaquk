@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Indoor Air Quality UK Index",
+        "description": "Configureer je binnenluchtkwaliteitssensoren",
+        "data": {
+          "name": "Naam",
+          "sources": "Sensorbronnen"
+        },
+        "data_description": {
+          "name": "Vriendelijke naam voor deze luchtkwaliteitssensor",
+          "sources": "Selecteer de sensoren die gebruikt moeten worden voor luchtkwaliteitsberekening"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "Minstens één sensorbron moet geselecteerd worden",
+      "only_one_voc_sensor": "Selecteer ofwel tVOC of VOC Index sensor, niet beide"
+    },
+    "abort": {
+      "already_configured": "Een sensor met deze naam is al geconfigureerd"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Indoor Air Quality UK Index Opties",
+        "description": "Update je binnenluchtkwaliteitssensoren",
+        "data": {
+          "sources": "Sensorbronnen"
+        },
+        "data_description": {
+          "sources": "Selecteer de sensoren die gebruikt moeten worden voor luchtkwaliteitsberekening"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "Minstens één sensorbron moet geselecteerd worden",
+      "only_one_voc_sensor": "Selecteer ofwel tVOC of VOC Index sensor, niet beide"
+    }
+  }
+}
