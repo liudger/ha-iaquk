@@ -11,6 +11,7 @@ from typing import Any, Final
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.components.sensor import DOMAIN as SENSOR
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     ATTR_UNIT_OF_MEASUREMENT,
     CONF_NAME,
@@ -60,6 +61,7 @@ from .const import (
     MWEIGTH_HCHO,
     MWEIGTH_NO2,
     MWEIGTH_TVOC,
+    PLATFORMS,
     SENSORS,
     STARTUP_MESSAGE,
     UNIT_MGM3,
@@ -156,6 +158,49 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         )
 
     return hass.data.get(DOMAIN) is not None
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up Indoor Air Quality UK Index from a config entry."""
+    # Print startup message
+    _LOGGER.info(STARTUP_MESSAGE)
+    hass.data.setdefault(DOMAIN, {})
+
+    name = entry.data[CONF_NAME]
+    sources = entry.data[CONF_SOURCES]
+
+    _LOGGER.debug(
+        "Initialize controller %s for sources: %s",
+        entry.entry_id,
+        ", ".join([f"{key}={value}" for (key, value) in sources.items()]),
+    )
+
+    controller = IaqukController(hass, entry.entry_id, name, sources)
+    hass.data[DOMAIN][entry.entry_id] = controller
+
+    # Set up platforms
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Set up update listener for options
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+
+    return True
+
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload a config entry."""
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id)
+
+    return unload_ok
+
+
+async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload config entry."""
+    await async_unload_entry(hass, entry)
+    await async_setup_entry(hass, entry)
 
 
 class IaqukController:

@@ -10,6 +10,7 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorStateClass,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME, CONF_SENSORS
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import async_generate_entity_id
@@ -54,6 +55,25 @@ async def async_setup_platform(
     sensors = []
     for sensor_type in discovery_info[CONF_SENSORS]:
         _LOGGER.debug("Initialize sensor %s for controller %s", sensor_type, object_id)
+        sensors.append(IaqukSensor(controller, sensor_type))
+
+    async_add_entities(sensors, update_before_add=True)
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up sensors from a config entry."""
+    controller = hass.data[DOMAIN][entry.entry_id]
+
+    sensors = []
+    # Create both sensors for config entries
+    for sensor_type in SENSORS:
+        _LOGGER.debug(
+            "Initialize sensor %s for controller %s", sensor_type, entry.entry_id
+        )
         sensors.append(IaqukSensor(controller, sensor_type))
 
     async_add_entities(sensors, update_before_add=True)

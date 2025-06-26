@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Indoor Air Quality UK Index",
+        "description": "Configurar sus sensores de calidad del aire interior",
+        "data": {
+          "name": "Nombre",
+          "sources": "Fuentes de sensores"
+        },
+        "data_description": {
+          "name": "Nombre descriptivo para este sensor de calidad del aire",
+          "sources": "Seleccione los sensores para usar en el cálculo de calidad del aire"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "Se debe seleccionar al menos una fuente de sensor",
+      "only_one_voc_sensor": "Seleccione tVOC o sensor VOC Index, no ambos"
+    },
+    "abort": {
+      "already_configured": "Un sensor con este nombre ya está configurado"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Indoor Air Quality UK Index",
+        "description": "Actualizar sus sensores de calidad del aire interior",
+        "data": {
+          "sources": "Fuentes de sensores"
+        },
+        "data_description": {
+          "sources": "Seleccione los sensores para usar en el cálculo de calidad del aire"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "Se debe seleccionar al menos una fuente de sensor",
+      "only_one_voc_sensor": "Seleccione tVOC o sensor VOC Index, no ambos"
+    }
+  }
+}
