@@ -5,8 +5,14 @@ echo -e "\\033[0;34mRunning install script 'container.sh'\\033[0m"
 export DEBIAN_FRONTEND=noninteractive
 
 apk add --no-cache \
+    curl \
     make \
     git
+
+python3 -m pip install --no-cache-dir --upgrade \
+    "prek==${PREK_VERSION}" \
+    "ty==${TY_VERSION}" \
+    "uv==${UV_VERSION}"
 
 mkdir -p /opt/container/makefiles
 mkdir -p /opt/container/helpers
