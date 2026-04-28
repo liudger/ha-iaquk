@@ -8,7 +8,9 @@ ROOT="$( cd "$( dirname "$(readlink -f "$0")" )/.." >/dev/null 2>&1 && pwd )"
 cd "${ROOT}"
 
 uv_version="${UV_VERSION:-0.11.8}"
-python_version="${PYTHON_VERSION:-3.14}"
+# Avoid PYTHON_VERSION: some devcontainer base images export it for their
+# system interpreter, which can conflict with the project requirement.
+python_version="${SETUP_PYTHON_VERSION:-3.14}"
 
 # Load common functions
 source ./scripts/_common
