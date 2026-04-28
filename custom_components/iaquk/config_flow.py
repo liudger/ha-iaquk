@@ -313,7 +313,7 @@ class IaqukOptionsFlow(config_entries.OptionsFlow):
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize options flow."""
-        self.config_entry = config_entry
+        self._current_sources = config_entry.data.get(CONF_SOURCES, {})
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -341,13 +341,13 @@ class IaqukOptionsFlow(config_entries.OptionsFlow):
                 )
 
         # Get current configuration
-        current_sources = self.config_entry.data.get(CONF_SOURCES, {})
-
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_SOURCES, default=current_sources): SOURCE_SCHEMA,
+                    vol.Required(
+                        CONF_SOURCES, default=self._current_sources
+                    ): SOURCE_SCHEMA,
                 }
             ),
             errors=errors,

@@ -251,5 +251,5 @@ async def test_options_flow(hass: HomeAssistant) -> None:
     )()
 
     options_flow = IaqukOptionsFlow(mock_entry)
-    assert options_flow is not None
-    assert options_flow.config_entry == mock_entry
+    result = await options_flow.async_step_init()
+    assert result["type"] == data_entry_flow.FlowResultType.FORM
