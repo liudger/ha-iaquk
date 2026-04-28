@@ -1,0 +1,46 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Indoor Air Quality UK Index",
+        "description": "Sélectionnez un appareil pour détecter automatiquement les capteurs de qualité de l'air, ou choisissez les sources manuellement.",
+        "data": {
+          "name": "Nom",
+          "device_id": "Appareil",
+          "sources": "Sources de capteurs"
+        },
+        "data_description": {
+          "name": "Nom convivial pour ce capteur de qualité de l'air",
+          "device_id": "Appareil dont les entités de capteur seront utilisées pour le calcul de la qualité de l'air",
+          "sources": "Sélectionnez les capteurs à utiliser pour le calcul de la qualité de l'air"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "Au moins une source de capteur doit être sélectionnée",
+      "no_matching_sources": "L'appareil sélectionné ne possède aucune source de capteur prise en charge. Sélectionnez les sources manuellement ou choisissez un autre appareil.",
+      "only_one_voc_sensor": "Veuillez sélectionner soit tVOC soit le capteur VOC Index, pas les deux"
+    },
+    "abort": {
+      "already_configured": "Un capteur avec ce nom est déjà configuré"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Indoor Air Quality UK Index",
+        "description": "Mettez à jour vos capteurs de qualité de l'air intérieur",
+        "data": {
+          "sources": "Sources de capteurs"
+        },
+        "data_description": {
+          "sources": "Sélectionnez les capteurs à utiliser pour le calcul de la qualité de l'air"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "Au moins une source de capteur doit être sélectionnée",
+      "only_one_voc_sensor": "Veuillez sélectionner soit tVOC soit le capteur VOC Index, pas les deux"
+    }
+  }
+}

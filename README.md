@@ -44,6 +44,16 @@ I also suggest you [visit the support topic][forum] on the community forum.
 1. Add `iaquk` sensor to your `configuration.yaml` file. See configuration examples below.
 1. Restart Home Assistant
 
+### Configure from the UI
+
+1. In Home Assistant, go to **Settings** > **Devices & services**.
+1. Click **Add integration** and search for **Indoor Air Quality UK Index**.
+1. Enter a name for the calculated air quality sensor.
+1. Select the device that provides the source readings, such as an IKEA VINDSTYRKA. The integration will use supported sensor entities from that device automatically.
+1. If needed, choose or override individual source entities manually.
+
+The integration creates `Indoor Air Quality Index` and `Indoor Air Quality Level` sensor entities that can be used in dashboards and automations.
+
 ### Configuration Examples
 
 To use this component in your installation, add the following to your `configuration.yaml` file:

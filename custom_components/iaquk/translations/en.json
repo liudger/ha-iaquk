@@ -1,0 +1,46 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Indoor Air Quality UK Index",
+        "description": "Select a device to auto-detect air quality sensors, or choose sensor sources manually.",
+        "data": {
+          "name": "Name",
+          "device_id": "Device",
+          "sources": "Sensor Sources"
+        },
+        "data_description": {
+          "name": "Friendly name for this air quality sensor",
+          "device_id": "Device whose sensor entities should be used for air quality calculation",
+          "sources": "Select the sensors to use for air quality calculation"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "At least one sensor source must be selected",
+      "no_matching_sources": "The selected device does not have any supported sensor sources. Select sources manually or choose another device.",
+      "only_one_voc_sensor": "Please select either tVOC or VOC Index sensor, not both"
+    },
+    "abort": {
+      "already_configured": "A sensor with this name is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Indoor Air Quality UK Index Options",
+        "description": "Update your Indoor Air Quality sensors",
+        "data": {
+          "sources": "Sensor Sources"
+        },
+        "data_description": {
+          "sources": "Select the sensors to use for air quality calculation"
+        }
+      }
+    },
+    "error": {
+      "no_sources": "At least one sensor source must be selected",
+      "only_one_voc_sensor": "Please select either tVOC or VOC Index sensor, not both"
+    }
+  }
+}
