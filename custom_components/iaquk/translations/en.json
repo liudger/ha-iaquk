@@ -7,12 +7,30 @@
         "data": {
           "name": "Name",
           "device_id": "Device",
-          "sources": "Sensor Sources"
+          "temperature": "Temperature sensor",
+          "humidity": "Humidity sensor",
+          "co2": "Carbon dioxide sensor",
+          "tvoc": "tVOC sensor",
+          "voc_index": "VOC index sensor",
+          "pm": "Particulate matter sensors",
+          "no2": "Nitrogen dioxide sensor",
+          "co": "Carbon monoxide sensor",
+          "hcho": "Formaldehyde sensor",
+          "radon": "Radon sensor"
         },
         "data_description": {
           "name": "Friendly name for this air quality sensor",
           "device_id": "Device whose sensor entities should be used for air quality calculation",
-          "sources": "Select the sensors to use for air quality calculation"
+          "temperature": "Optional temperature source used for the air quality calculation",
+          "humidity": "Optional humidity source used for the air quality calculation",
+          "co2": "Optional CO2 source used for the air quality calculation",
+          "tvoc": "Optional total VOC source used for the air quality calculation",
+          "voc_index": "Optional VOC index source used for the air quality calculation",
+          "pm": "Optional particulate matter sources used for the air quality calculation",
+          "no2": "Optional NO2 source used for the air quality calculation",
+          "co": "Optional CO source used for the air quality calculation",
+          "hcho": "Optional formaldehyde source used for the air quality calculation",
+          "radon": "Optional radon source used for the air quality calculation"
         }
       }
     },
@@ -31,10 +49,28 @@
         "title": "Indoor Air Quality UK Index Options",
         "description": "Update your Indoor Air Quality sensors",
         "data": {
-          "sources": "Sensor Sources"
+          "temperature": "Temperature sensor",
+          "humidity": "Humidity sensor",
+          "co2": "Carbon dioxide sensor",
+          "tvoc": "tVOC sensor",
+          "voc_index": "VOC index sensor",
+          "pm": "Particulate matter sensors",
+          "no2": "Nitrogen dioxide sensor",
+          "co": "Carbon monoxide sensor",
+          "hcho": "Formaldehyde sensor",
+          "radon": "Radon sensor"
         },
         "data_description": {
-          "sources": "Select the sensors to use for air quality calculation"
+          "temperature": "Optional temperature source used for the air quality calculation",
+          "humidity": "Optional humidity source used for the air quality calculation",
+          "co2": "Optional CO2 source used for the air quality calculation",
+          "tvoc": "Optional total VOC source used for the air quality calculation",
+          "voc_index": "Optional VOC index source used for the air quality calculation",
+          "pm": "Optional particulate matter sources used for the air quality calculation",
+          "no2": "Optional NO2 source used for the air quality calculation",
+          "co": "Optional CO source used for the air quality calculation",
+          "hcho": "Optional formaldehyde source used for the air quality calculation",
+          "radon": "Optional radon source used for the air quality calculation"
         }
       }
     },

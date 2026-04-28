@@ -59,56 +59,60 @@ DEVICE_SELECTOR = selector.DeviceSelector(
 )
 
 # Source configuration options
-SOURCE_SCHEMA = vol.Schema(
-    {
-        vol.Optional(CONF_TEMPERATURE): selector.EntitySelector(
-            selector.EntitySelectorConfig(
-                domain="sensor",
-                device_class="temperature",
-            )
-        ),
-        vol.Optional(CONF_HUMIDITY): selector.EntitySelector(
-            selector.EntitySelectorConfig(
-                domain="sensor",
-                device_class="humidity",
-            )
-        ),
-        vol.Optional(CONF_CO2): selector.EntitySelector(
-            selector.EntitySelectorConfig(
-                domain="sensor",
-                device_class="carbon_dioxide",
-            )
-        ),
-        vol.Optional(CONF_TVOC): selector.EntitySelector(
-            selector.EntitySelectorConfig(domain="sensor")
-        ),
-        vol.Optional(CONF_VOC_INDEX): selector.EntitySelector(
-            selector.EntitySelectorConfig(domain="sensor")
-        ),
-        vol.Optional(CONF_PM): selector.EntitySelector(
-            selector.EntitySelectorConfig(
-                domain="sensor",
-                device_class="pm25",
-                multiple=True,
-            )
-        ),
-        vol.Optional(CONF_NO2): selector.EntitySelector(
-            selector.EntitySelectorConfig(domain="sensor")
-        ),
-        vol.Optional(CONF_CO): selector.EntitySelector(
-            selector.EntitySelectorConfig(
-                domain="sensor",
-                device_class="carbon_monoxide",
-            )
-        ),
-        vol.Optional(CONF_HCHO): selector.EntitySelector(
-            selector.EntitySelectorConfig(domain="sensor")
-        ),
-        vol.Optional(CONF_RADON): selector.EntitySelector(
-            selector.EntitySelectorConfig(domain="sensor")
-        ),
+SOURCE_SELECTORS = {
+    CONF_TEMPERATURE: selector.EntitySelector(
+        selector.EntitySelectorConfig(
+            domain="sensor",
+            device_class="temperature",
+        )
+    ),
+    CONF_HUMIDITY: selector.EntitySelector(
+        selector.EntitySelectorConfig(
+            domain="sensor",
+            device_class="humidity",
+        )
+    ),
+    CONF_CO2: selector.EntitySelector(
+        selector.EntitySelectorConfig(
+            domain="sensor",
+            device_class="carbon_dioxide",
+        )
+    ),
+    CONF_TVOC: selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor")),
+    CONF_VOC_INDEX: selector.EntitySelector(
+        selector.EntitySelectorConfig(domain="sensor")
+    ),
+    CONF_PM: selector.EntitySelector(
+        selector.EntitySelectorConfig(
+            domain="sensor",
+            device_class="pm25",
+            multiple=True,
+        )
+    ),
+    CONF_NO2: selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor")),
+    CONF_CO: selector.EntitySelector(
+        selector.EntitySelectorConfig(
+            domain="sensor",
+            device_class="carbon_monoxide",
+        )
+    ),
+    CONF_HCHO: selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor")),
+    CONF_RADON: selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor")),
+}
+
+
+def _source_schema_fields(
+    defaults: dict[str, Any] | None = None,
+) -> dict[vol.Optional, selector.EntitySelector]:
+    """Return flat source selector fields for config and options flows."""
+    defaults = defaults or {}
+
+    return {
+        vol.Optional(source, default=defaults[source])
+        if source in defaults
+        else vol.Optional(source): source_selector
+        for source, source_selector in SOURCE_SELECTORS.items()
     }
-)
 
 
 def _has_at_least_one_source(sources: dict[str, Any]) -> bool:
@@ -132,6 +136,16 @@ def _clean_sources(sources: dict[str, Any] | None) -> dict[str, Any]:
         return {}
 
     return {key: value for key, value in sources.items() if value}
+
+
+def _sources_from_user_input(user_input: dict[str, Any]) -> dict[str, Any]:
+    """Return source selections submitted by the user."""
+    if CONF_SOURCES in user_input:
+        return _clean_sources(user_input.get(CONF_SOURCES))
+
+    return _clean_sources(
+        {source: user_input.get(source) for source in SOURCE_SELECTORS}
+    )
 
 
 def _entity_labels(entry: er.RegistryEntry) -> str:
@@ -232,7 +246,7 @@ def _sources_from_input(
     if device_id := user_input.get(CONF_DEVICE_ID):
         sources.update(_sources_from_device(hass, device_id))
 
-    sources.update(_clean_sources(user_input.get(CONF_SOURCES)))
+    sources.update(_sources_from_user_input(user_input))
     return sources
 
 
@@ -293,7 +307,7 @@ class IaqukConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_NAME, default="Indoor Air Quality"): str,
                     vol.Optional(CONF_DEVICE_ID): DEVICE_SELECTOR,
-                    vol.Optional(CONF_SOURCES, default={}): SOURCE_SCHEMA,
+                    **_source_schema_fields(),
                 }
             ),
             errors=errors,
@@ -322,7 +336,7 @@ class IaqukOptionsFlow(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            sources = _clean_sources(user_input.get(CONF_SOURCES))
+            sources = _sources_from_user_input(user_input)
 
             # Validate that at least one source is provided
             if not _has_at_least_one_source(sources):
@@ -343,12 +357,6 @@ class IaqukOptionsFlow(config_entries.OptionsFlow):
         # Get current configuration
         return self.async_show_form(
             step_id="init",
-            data_schema=vol.Schema(
-                {
-                    vol.Required(
-                        CONF_SOURCES, default=self._current_sources
-                    ): SOURCE_SCHEMA,
-                }
-            ),
+            data_schema=vol.Schema(_source_schema_fields(self._current_sources)),
             errors=errors,
         )

@@ -69,10 +69,8 @@ async def test_form_user(hass: HomeAssistant) -> None:
         result["flow_id"],
         {
             CONF_NAME: "Test Air Quality",
-            CONF_SOURCES: {
-                CONF_TEMPERATURE: "sensor.temperature",
-                CONF_HUMIDITY: "sensor.humidity",
-            },
+            CONF_TEMPERATURE: "sensor.temperature",
+            CONF_HUMIDITY: "sensor.humidity",
         },
     )
     await hass.async_block_till_done()
@@ -98,7 +96,6 @@ async def test_form_user_no_sources(hass: HomeAssistant) -> None:
         result["flow_id"],
         {
             CONF_NAME: "Test Air Quality",
-            CONF_SOURCES: {},
         },
     )
 
@@ -116,10 +113,8 @@ async def test_form_user_both_voc_sensors(hass: HomeAssistant) -> None:
         result["flow_id"],
         {
             CONF_NAME: "Test Air Quality",
-            CONF_SOURCES: {
-                CONF_TVOC: "sensor.tvoc",
-                CONF_VOC_INDEX: "sensor.voc_index",
-            },
+            CONF_TVOC: "sensor.tvoc",
+            CONF_VOC_INDEX: "sensor.voc_index",
         },
     )
 
@@ -213,9 +208,7 @@ async def test_form_user_already_configured(hass: HomeAssistant) -> None:
         result["flow_id"],
         {
             CONF_NAME: "Test Air Quality",
-            CONF_SOURCES: {
-                CONF_TEMPERATURE: "sensor.temperature",
-            },
+            CONF_TEMPERATURE: "sensor.temperature",
         },
     )
 
@@ -228,9 +221,7 @@ async def test_form_user_already_configured(hass: HomeAssistant) -> None:
         result2["flow_id"],
         {
             CONF_NAME: "Test Air Quality",
-            CONF_SOURCES: {
-                CONF_TEMPERATURE: "sensor.temperature",
-            },
+            CONF_TEMPERATURE: "sensor.temperature",
         },
     )
 
