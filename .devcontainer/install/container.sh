@@ -5,8 +5,13 @@ echo -e "\\033[0;34mRunning install script 'container.sh'\\033[0m"
 export DEBIAN_FRONTEND=noninteractive
 
 apk add --no-cache \
+    curl \
     make \
     git
+
+curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh
+uv tool install --force "prek==${PREK_VERSION}"
+uv tool install --force "ty==${TY_VERSION}"
 
 mkdir -p /opt/container/makefiles
 mkdir -p /opt/container/helpers

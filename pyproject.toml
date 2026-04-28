@@ -1,9 +1,43 @@
 [project]
 name = "iaquk"
-requires-python = ">=3.12"
+version = "1.6.11a0"
+requires-python = ">=3.14.2,<3.15"
+dependencies = [
+    "homeassistant==2026.4.4",
+]
+
+[dependency-groups]
+test = [
+    "async-timeout",
+    "asynctest~=0.13",
+    "colorlog~=6.10",
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "pytest-homeassistant-custom-component>=0.13",
+    "tzdata",
+]
+ci = [
+    { include-group = "test" },
+    "coveralls>=4.0",
+    "pytest-xdist>=3.6",
+]
+dev = [
+    { include-group = "ci" },
+    "packaging~=25.0",
+    "pre-commit~=4.6",
+    "prek==0.3.11",
+    "PyGithub~=2.9",
+    "requests~=2.32",
+    "ruff>=0.15.12",
+    "ty==0.0.32",
+]
+
+[tool.uv]
+package = false
+prerelease = "allow"
 
 [tool.black]
-target-version = ["py312"]
+target-version = ["py314"]
 extend-exclude = "/generated/"
 
 [tool.isort]
@@ -21,7 +55,7 @@ forced_separate = [
 combine_as_imports = true
 
 [tool.pylint.MAIN]
-py-version = "3.12"
+py-version = "3.14"
 ignore = [
     "tests",
 ]
@@ -166,8 +200,9 @@ log_date_format = "%Y-%m-%d %H:%M:%S"
 asyncio_mode = "auto"
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py314"
 
+[tool.ruff.lint]
 select = [
     "C",  # complexity
     "D",  # docstrings
@@ -251,13 +286,13 @@ voluptuous = "vol"
 "homeassistant.helpers.label_registry" = "lr"
 "homeassistant.util.dt" = "dt_util"
 
-[tool.ruff.flake8-pytest-style]
+[tool.ruff.lint.flake8-pytest-style]
 fixture-parentheses = false
 
-[tool.ruff.pyupgrade]
+[tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 
 # TODO: these files have functions that are too complex, but flake8's and ruff's
 #       complexity (and/or nested-function) handling differs; trying to add a noqa doesn't work
@@ -273,5 +308,5 @@ keep-runtime-typing = true
 "homeassistant/scripts/*" = ["T201"]
 "script/*" = ["T20"]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 25

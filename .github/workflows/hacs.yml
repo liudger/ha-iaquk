@@ -12,8 +12,9 @@ jobs:
     runs-on: "ubuntu-latest"
     name: HACS
     steps:
-      - uses: "actions/checkout@v4"
+      - uses: "actions/checkout@v6"
       - name: HACS validation
         uses: "hacs/action@main"
         with:
-          CATEGORY: "integration"
+          category: "integration"
+          ignore: "brands topics"

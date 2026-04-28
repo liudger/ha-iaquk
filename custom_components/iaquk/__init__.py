@@ -77,9 +77,8 @@ def check_voc_keys(conf: ConfigType) -> ConfigType:
     keys: Final = [CONF_TVOC, CONF_VOC_INDEX]
     count = sum(param in conf for param in keys)
     if count > 1:
-        raise vol.Invalid(
-            "You must provide none or only one of the following: " ", ".join(keys)
-        )
+        msg = f"You must provide none or only one of the following: {', '.join(keys)}"
+        raise vol.Invalid(msg)
     return conf
 
 

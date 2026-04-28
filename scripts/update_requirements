@@ -4,7 +4,9 @@
 import json
 import os
 import sys
+import tomllib
 
+from packaging.requirements import InvalidRequirement, Requirement
 import requests
 
 ROOT = os.path.dirname(os.path.abspath(f"{__file__}/.."))
@@ -21,9 +23,23 @@ if not PACKAGE:
     sys.exit(1)
 
 
-def get_package(requre: str) -> str:
+def get_package(requirement: str) -> str:
     """Extract package name from requirement."""
-    return requre.split(">")[0].split("<")[0].split("!")[0].split("=")[0].split("~")[0]
+    requirement = requirement.split("#", 1)[0].strip()
+    if not requirement:
+        return ""
+    try:
+        return Requirement(requirement).name.lower()
+    except InvalidRequirement:
+        return (
+            requirement.split(">")[0]
+            .split("<")[0]
+            .split("!")[0]
+            .split("=")[0]
+            .split("~")[0]
+            .strip()
+            .lower()
+        )
 
 
 harequire = ["homeassistant"]
@@ -31,6 +47,7 @@ request = requests.get(
     "https://raw.githubusercontent.com/home-assistant/core/dev/requirements.txt",
     timeout=10,
 )
+request.raise_for_status()
 request = request.text.split("\n")
 for req in request:
     if "=" in req:
@@ -39,14 +56,14 @@ for req in request:
 with open(f"{PKG_PATH}/manifest.json", encoding="utf8") as manifest:
     manifest = json.load(manifest)
 
-with open(f"{ROOT}/requirements.txt", encoding="utf8") as requirements:
-    tmp = requirements.readlines()
-    requirements = []
-    for req in tmp:
-        pkg = get_package(req)
-        if pkg not in harequire:
-            requirements.append(req.replace("\n", ""))
-    manifest["requirements"] = requirements
+with open(f"{ROOT}/pyproject.toml", "rb") as pyproject_file:
+    runtime_requirements = tomllib.load(pyproject_file).get("project", {}).get("dependencies", [])
+
+manifest["requirements"] = [
+    requirement
+    for requirement in runtime_requirements
+    if get_package(requirement) not in harequire
+]
 
 with open(f"{PKG_PATH}/manifest.json", "w", encoding="utf8") as manifestfile:
     manifestfile.write(json.dumps(manifest, indent=4))

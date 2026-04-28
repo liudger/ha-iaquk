@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout the repository"
-        uses: "actions/checkout@v4.1.0"
+        uses: "actions/checkout@v6"
 
       - working-directory: ./custom_components
         run: |
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Check out repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - working-directory: ./custom_components
         run: |
@@ -54,28 +54,24 @@ jobs:
 
       - name: "Set up Python"
         if: env.release_version != '' && success()
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version-file: 'pyproject.toml'
 
-      - name: "Cache pip"
+      - name: "Install uv"
         if: env.release_version != '' && success()
-        uses: actions/cache@v4
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          # This path is specific to Ubuntu
-          path: ~/.cache/pip
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
+          version: "0.11.8"
+          enable-cache: true
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
 
       - name: "Install requirements"
         if: env.release_version != '' && success()
-        run: |
-          python3 -m pip install setuptools wheel
-          python3 -m pip install -r ./requirements-dev.txt
+        run: uv sync --locked --group dev
 
       - name: "Update release notes"
         if: env.release_version != '' && success()
-        run: python3 ./scripts/gen_releasenotes --token ${{ secrets.GITHUB_TOKEN }} --repo ${{ github.repository }} --release ${{ env.release_version }}
+        run: uv run ./scripts/gen_releasenotes --token ${{ secrets.GITHUB_TOKEN }} --repo ${{ github.repository }} --release ${{ env.release_version }}
