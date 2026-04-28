@@ -13,6 +13,7 @@ fi
 for venv in venv .venv .; do
     if [ -f $venv/bin/activate ]; then
         . $venv/bin/activate
+        break
     fi
 done
 

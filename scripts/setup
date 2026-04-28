@@ -17,42 +17,25 @@ if [ ! -d "venv" ]; then
     # For error 'executable `python` not found' run
     # rm -Rf ~/.local/share/virtualenv
     ${python} -m venv ./venv
-    source ./venv/bin/activate
-    python="${ROOT}/venv/bin/python3"
-else
-    ${python} -m venv ./venv
 fi
 
+source ./venv/bin/activate
+python="${ROOT}/venv/bin/python3"
+
 pip="${python} -m pip"
+uv="${ROOT}/venv/bin/uv"
+prek="${ROOT}/venv/bin/prek"
 
 log.info "Updating PIP..."
 ${pip} install --upgrade pip
 
+log.info "Installing uv..."
+${pip} install --upgrade uv==0.11.8
+
 log.info "Installing development dependencies..."
-${pip} install colorlog pre-commit $(grep mypy requirements-dev.txt)
+${uv} pip install --upgrade -r requirements-dev.txt
 
-pre-commit install
-
-REQ=$(cat requirements-dev.txt)
-while true; do
-    FILES=$(echo "${REQ}" | grep "^-r " | sed "s/^-r\\s\+//g")
-    if test -z "${FILES}"; then
-        break
-    fi
-    for FILE in ${FILES}; do
-        FILE_R=$(echo "${FILE}" | sed "s/\\./\\\\./g")
-        REQ=$(echo "${REQ}" | sed -e "/^-r\\s\+${FILE_R}/{r ${FILE}" -e "d" -e "}")
-    done
-done
-GIT=$(echo "${REQ}" | grep "{GITHUB_TOKEN}" | tr '\r\n' ' ')
-REQ=$(echo "${REQ}" | grep -v "{GITHUB_TOKEN}" | tr '\r\n' ' ')
-
-if test -n "${GIT}"; then
-    GITHUB_TOKEN=$(grep github_token secrets.yaml | cut -d' ' -f2)
-    GIT=$(echo "${GIT}" | sed "s/{GITHUB_TOKEN}/${GITHUB_TOKEN}/g")
-    ${pip} install --upgrade ${GIT}
-fi
-
-${pip} install --upgrade ${REQ}
+log.info "Installing git hooks..."
+${prek} install
 
 echo '"""Custom components module."""' >custom_components/__init__.py

@@ -4,5 +4,9 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-ruff format .
-ruff check . --fix
+if command -v prek >/dev/null 2>&1; then
+	SKIP=pytest prek run --all-files
+else
+	ruff format .
+	ruff check . --fix
+fi
