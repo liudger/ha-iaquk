@@ -65,13 +65,13 @@ jobs:
           version: "0.11.8"
           enable-cache: true
           cache-dependency-glob: |
-            requirements*.txt
             pyproject.toml
+            uv.lock
 
       - name: "Install requirements"
         if: env.release_version != '' && success()
-        run: uv pip install --system -r requirements-dev.txt
+        run: uv sync --locked --group dev
 
       - name: "Update release notes"
         if: env.release_version != '' && success()
-        run: python3 ./scripts/gen_releasenotes --token ${{ secrets.GITHUB_TOKEN }} --repo ${{ github.repository }} --release ${{ env.release_version }}
+        run: uv run ./scripts/gen_releasenotes --token ${{ secrets.GITHUB_TOKEN }} --repo ${{ github.repository }} --release ${{ env.release_version }}

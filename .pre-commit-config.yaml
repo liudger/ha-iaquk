@@ -5,7 +5,7 @@ repos:
         name: Update manifest.json
         entry: scripts/run-in-env scripts/update_manifest
         language: system
-        files: ^(custom_components/.+/const\.py|requirements\.txt)$
+        files: ^(custom_components/.+/const\.py|pyproject\.toml)$
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.12
     hooks:
@@ -18,7 +18,7 @@ repos:
     rev: v3.21.2
     hooks:
       - id: pyupgrade
-        args: [ --py312-plus ]
+        args: [ --py314-plus ]
         stages: [manual]
   - repo: https://github.com/PyCQA/bandit
     rev: 1.9.4

@@ -9,10 +9,9 @@ apk add --no-cache \
     make \
     git
 
-python3 -m pip install --no-cache-dir --upgrade \
-    "prek==${PREK_VERSION}" \
-    "ty==${TY_VERSION}" \
-    "uv==${UV_VERSION}"
+curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh
+uv tool install --force "prek==${PREK_VERSION}"
+uv tool install --force "ty==${TY_VERSION}"
 
 mkdir -p /opt/container/makefiles
 mkdir -p /opt/container/helpers

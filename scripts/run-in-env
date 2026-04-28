@@ -10,11 +10,13 @@ if [ -s .python-version ]; then
 fi
 
 # other common virtualenvs
-for venv in venv .venv .; do
-    if [ -f $venv/bin/activate ]; then
-        . $venv/bin/activate
-        break
-    fi
-done
+if [ -z "${VIRTUAL_ENV:-}" ]; then
+    for venv in venv .venv .; do
+        if [ -f $venv/bin/activate ]; then
+            . $venv/bin/activate
+            break
+        fi
+    done
+fi
 
 exec "$@"

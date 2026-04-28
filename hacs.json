@@ -1,7 +1,7 @@
 {
     "name": "Indoor Air Quality UK Index",
     "hide_default_branch": true,
-    "homeassistant": "2025.1.0",
+    "homeassistant": "2026.4.4",
     "hacs": "2.0.1",
     "render_readme": true
 }

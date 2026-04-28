@@ -1,8 +1,0 @@
--r requirements-test.txt
-packaging~=25.0
-pre-commit~=4.6
-prek==0.3.11
-PyGithub~=2.9
-requests~=2.32
-ty==0.0.32
-uv==0.11.8

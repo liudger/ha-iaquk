@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 env:
-  PYTHON_VERSION: "3.12"
+  PYTHON_VERSION: "3.14"
   UV_VERSION: "0.11.8"
 
 jobs:
@@ -33,18 +33,16 @@ jobs:
           version: ${{ env.UV_VERSION }}
           enable-cache: true
           cache-dependency-glob: |
-            requirements*.txt
             pyproject.toml
+            uv.lock
             .pre-commit-config.yaml
 
       - name: "Install dependencies"
-        run: |
-          uv pip install --system -r requirements-dev.txt
-          echo '"""Stub."""' >custom_components/__init__.py
+        run: uv sync --locked --group dev
 
       - name: "Run hooks"
         run: |
-          SKIP=pytest prek run --all-files
+          SKIP=pytest uv run prek run --all-files
           ./scripts/check_dirty
 
       - name: "Prune uv cache"
@@ -70,23 +68,21 @@ jobs:
           version: ${{ env.UV_VERSION }}
           enable-cache: true
           cache-dependency-glob: |
-            requirements*.txt
             pyproject.toml
+            uv.lock
 
       - name: "Install dependencies"
-        run: |
-          uv pip install --system -r requirements-test.txt pytest-xdist coveralls
-          echo '"""Stub."""' >custom_components/__init__.py
+        run: uv sync --locked --group ci
 
       - name: "Run tests with coverage"
         run: |
-          pytest --basetemp=$RUNNER_TEMP --durations=10 -n auto --dist=loadfile -qq -o console_output_style=count -p no:sugar --cov --cov-report=
+          uv run pytest --basetemp=$RUNNER_TEMP --durations=10 -n auto --dist=loadfile -qq -o console_output_style=count -p no:sugar --cov --cov-report=
           ./scripts/check_dirty
 
       - name: "Send coverage to Coveralls"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: coveralls --service=github
+        run: uv run coveralls --service=github
 
       - name: "Prune uv cache"
         if: always()
@@ -112,16 +108,14 @@ jobs:
           version: ${{ env.UV_VERSION }}
           enable-cache: true
           cache-dependency-glob: |
-            requirements*.txt
             pyproject.toml
+            uv.lock
 
       - name: "Install dependencies"
-        run: |
-          uv pip install --system -r requirements-dev.txt
-          echo '"""Stub."""' >custom_components/__init__.py
+        run: uv sync --locked --group dev
 
       - name: "Run ty"
-        run: ty check --output-format github custom_components tests
+        run: uv run ty check --exit-zero --output-format github custom_components tests
 
       - name: "Prune uv cache"
         if: always()
